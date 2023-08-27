@@ -23,7 +23,7 @@ touch hackernews.json.dirty
 echo "{ \"content\": \"https://www.thehackernews.com" > hackernews.json.dirty
 
 # Retrieve news (only headers) from The Hacker News
-curl -s https://thehackernews.com/ | grep -o "<h2 class='home-title'>.*<\/h2>" | sed 's/<img.*//g' | sed "s/<h2\ class='home-title'>//g" | sed "s/<.*//g" | sed '/^$/d' >> hackernews.json.dirty
+curl -s https://thehackernews.com/ | grep -o "<h2 class='home-title'>.*<\/h2>" | sed 's/<img.*//g' | sed "s/<h2\ class='home-title'>//g" | sed "s/<.*//g" | sed '/^$/d' | sed 's/"/\\"/g' >> hackernews.json.dirty
 
 # Transform the content of the file into correct json syntax
 cat hackernews.json.dirty | sed -z 's/\n/\\n/g' | sed 's/\\n$/\" }/g' >> hackernews.json
@@ -50,7 +50,7 @@ touch bleepingcomputer.json.dirty
 echo "{ \"content\": \"https://www.bleepingcomputer.com/" > bleepingcomputer.json.dirty
 
 # Download an clean content from bleepingcomputer.com (retrieve the news headers)
-curl -s https://www.bleepingcomputer.com/ | grep '<h4>.*<\/h4>' | awk '!/<h4><a href="https:\/\/www\.bleepingcomputer\.com\/news\/security\//{$0=""}1' | sed '/^$/d' | sed 's/<h4.*">//g' | sed 's/<\/a.*//g' >> bleepingcomputer.json.dirty
+curl -s https://www.bleepingcomputer.com/ | grep '<h4>.*<\/h4>' | awk '!/<h4><a href="https:\/\/www\.bleepingcomputer\.com\/news\/security\//{$0=""}1' | sed '/^$/d' | sed 's/<h4.*">//g' | sed 's/<\/a.*//g' | sed 's/"/\\"/g' >> bleepingcomputer.json.dirty
 
 # Transform the content of the file into a valid json file
 cat bleepingcomputer.json.dirty | sed -z 's/\n/\\n/g' | sed 's/\\n$/\" }/g' >> bleepingcomputer.json
